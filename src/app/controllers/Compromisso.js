@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Agendamento from '@/app/schemas/Agendamento';
-import { route } from 'express/lib/application';
 import slugify from 'slugify';
+import AuthMiddleware from '@/app/middlewares/Auth';
 
 const router = new Router();
 
@@ -41,7 +41,7 @@ router.get('/:link', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', AuthMiddleware, (req, res) => {
   const { descricao, local, dataHora } = req.body;
   Agendamento.create({ descricao, local, dataHora })
     .then((agendamento) => {
@@ -60,7 +60,7 @@ router.post('/', (req, res) => {
     });
 });
 
-router.put('/:idAgendamento', (req, res) => {
+router.put('/:idAgendamento', AuthMiddleware, (req, res) => {
   const { descricao, local, dataHora } = req.body;
   let link;
   if (descricao) {
@@ -85,7 +85,7 @@ router.put('/:idAgendamento', (req, res) => {
     });
 });
 
-router.delete('/:idAgendamento', (req, res) => {
+router.delete('/:idAgendamento', AuthMiddleware, (req, res) => {
   Agendamento.findByIdAndRemove(req.params.idAgendamento)
     .then(() => {
       res.status(200).send({ mensagem: 'Agendamento removido com sucesso' });
