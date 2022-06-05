@@ -22,6 +22,14 @@ const UsuarioSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
+  tokenDeTrocaDeSenha: {
+    type: String,
+    select: false,
+  },
+  validadeTokenDeTrocaDeSenha: {
+    type: Date,
+    select: false,
+  },
 });
 
 UsuarioSchema.pre('save', function (next) {
