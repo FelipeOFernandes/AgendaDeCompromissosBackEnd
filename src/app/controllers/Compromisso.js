@@ -60,7 +60,7 @@ router.post('/', AuthMiddleware, (req, res) => {
     });
 });
 
-router.put('/:idAgendamento', AuthMiddleware, (req, res) => {
+router.put('/:id', AuthMiddleware, (req, res) => {
   const { descricao, local, dataHora } = req.body;
   let link;
   if (descricao) {
@@ -68,7 +68,7 @@ router.put('/:idAgendamento', AuthMiddleware, (req, res) => {
   }
 
   Agendamento.findByIdAndUpdate(
-    req.params.idAgendamento,
+    req.params.id,
     { descricao, local, link, dataHora },
     { new: true },
   )
@@ -85,8 +85,8 @@ router.put('/:idAgendamento', AuthMiddleware, (req, res) => {
     });
 });
 
-router.delete('/:idAgendamento', AuthMiddleware, (req, res) => {
-  Agendamento.findByIdAndRemove(req.params.idAgendamento)
+router.delete('/:id', AuthMiddleware, (req, res) => {
+  Agendamento.findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(200).send({ mensagem: 'Agendamento removido com sucesso' });
     })

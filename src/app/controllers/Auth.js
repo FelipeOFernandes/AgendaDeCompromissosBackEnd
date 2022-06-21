@@ -59,7 +59,7 @@ router.post('/login', (req, res) => {
             }
           })
           .catch((erro) => {
-            console.error('Erro ao vefificar a senha', erro);
+            console.error('Erro ao verificar a senha', erro);
             return res.status(500).send({
               erro: 'O login falhou',
             });

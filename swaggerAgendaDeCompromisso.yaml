@@ -1,0 +1,411 @@
+swagger: '2.0'
+info:
+  description: "Documentação da API feita para a capacitação da COMP 2022/1."
+  version: '1.0.0'
+  title: 'Agenda de compromissos'
+host: 'localhost:3000'
+basePath: '/'
+tags:
+  - name: 'Compromisso'
+    description: 'Operações relacionadas ao compromisso'
+  - name: 'Usuário'
+    description: 'Operações relacionadas aos usuários'
+schemes:
+  - 'http'
+paths:
+
+
+  /compromisso:
+    get:
+      tags:
+        - 'Compromisso'
+      summary: 'Retorna todos os compromissos'
+      description: 'Retorna todos os compromissos'
+      operationId: 'getCompromisso'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: 'Lista de compromissos'
+          schema:
+            type: 'array'
+            items:
+              type: 'object'
+              properties:
+                id:
+                  type: 'string' 
+                  example: '1234ABCDE'
+                descricao:
+                  type: 'string'
+                  example: 'Enviar email para Fulano'
+                dataHora:
+                  type: 'string'
+                  format: 'date-time'
+                  example: '2022-05-06T21:00:00.000Z'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Token inválido'
+
+    post:
+      tags:
+        - 'Compromisso'
+      summary: 'Criação de um novo compromisso'
+      description: 'Criação de um novo compromisso <br> A dataHora do compromisso deve ser única'
+      operationId: 'postCompromisso'
+      security:
+        - Bearer: []
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Dados do compromisso'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              descricao:
+                  type: 'string'
+                  example: 'Enviar email para Fulano'
+              local: 
+                  type: 'string'
+                  example: 'Escritório'
+              dataHora:
+                  type: 'string'
+                  format: 'date-time'
+                  example: '2022-05-06T21:00:00.000Z'
+      responses:
+        '200':
+          description: 'Compromisso criado com sucesso'
+          schema:
+              $ref: '#/definitions/Compromisso'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Token inválido'
+      
+
+  /compromisso/{link}:
+    get:
+      tags:
+        - 'Compromisso'
+      summary: 'Retorna o compromisso de acordo com o link'
+      description: 'Retorna o compromisso de acordo com o link'
+      operationId: 'getUnicoCompromisso'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      security:
+        - Bearer: []
+      parameters:
+        - in: 'path'
+          name : 'link'
+          type: 'string'
+          required: true
+      responses:
+        '200':
+          description: 'Ok'
+          schema:
+              $ref: '#/definitions/Compromisso'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Token inválido'
+
+
+  /compromisso/{id}:
+    put:
+      tags:
+          - 'Compromisso'
+      summary: 'Edição de um compromisso'
+      description: 'Edição de um novo compromisso <br> A dataHora do compromisso deve ser única'
+      operationId: 'updateCompromisso'
+      security:
+        - Bearer: []
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'path'
+          name : 'id'
+          type: 'string'
+          required: true
+        - in: 'body'
+          name: 'body'
+          description: 'Dados do compromisso'
+          required: true
+          schema:
+              type: 'object'
+              properties:
+                descricao:
+                    type: 'string'
+                    example: 'Enviar email para Ciclano'
+                local: 
+                    type: 'string'
+                    example: 'Escritório'
+                dataHora:
+                    type: 'string'
+                    format: 'date-time'
+                    example: '2022-05-07T21:00:00.000Z'
+      responses:
+          '200':
+            description: 'Compromisso atualizado com sucesso'
+            schema:
+                $ref: '#/definitions/Compromisso'
+          '400':
+            description: 'Bad request'
+          '401':
+            description: 'Token inválido'
+
+    delete:
+      tags:
+        - 'Compromisso'
+      summary: 'Deleta o compromisso'
+      description: 'Deleta o compromisso '
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      security:
+        - Bearer: []
+      parameters:
+        - in: 'path'
+          name : 'id'
+          type: 'string'
+          required: true
+      responses:
+        '200':
+            description: "Compromisso removido com sucesso"
+            schema:
+              type: 'object'
+              properties:
+                mensagem:
+                  type: 'string'
+                  example: 'Compromisso removido com sucesso'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: 'Token inválido'
+  
+  
+  /auth/registrar:
+    post:
+      tags:
+        - 'Usuário'
+      summary: 'Registra um novo usuário'
+      description: 'Registra um novo usuário'
+      operationId: 'registrar'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Dados do novo usuário'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              nome:
+                  type: 'string'
+                  example: 'Fulano da SIlva'
+              email: 
+                  type: 'string'
+                  format: 'email'
+                  example: 'fulano@email.com'
+              senha:
+                  type: 'string'
+                  format: 'password'
+                  example: 'senha123'
+      responses:
+        '200':
+          description: 'Usuário criado com sucesso'
+          schema:
+              $ref: '#/definitions/Usuario'
+        '400':
+          description: 'Bad request'
+        '500':
+          description: 'Internal server error'
+
+
+  /auth/login:
+    post:
+      tags:
+        - 'Usuário'
+      summary: 'Loga o usuário no sistme'
+      description: 'Retorna o JWT e o tempo para expirar'
+      operationId: 'login'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Dados do usuário'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              email: 
+                  type: 'string'
+                  format: 'email'
+                  example: 'fulano@email.com'
+              senha:
+                  type: 'string'
+                  format: 'password'
+                  example: 'senha123'
+      responses:
+        '200':
+          description: 'Usuário logado   com sucesso'
+          schema:
+              type: 'object'
+              properties: 
+                token:
+                  type: 'string'
+                expiraEm:
+                  type: 'string'
+                  example: '1d'
+
+        '400':
+          description: 'Bad request'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+
+
+  /auth/esqueci-minha-senha:
+    post:
+      tags:
+        - 'Usuário'
+      summary: 'Envia para o email do usuário o token para recuperar senha'
+      description: 'Envia para o email do usuário o token para recuperar senha'
+      operationId: 'esqueciMinhaSenha'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Email do usuário'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              email: 
+                  type: 'string'
+                  format: 'email'
+                  example: 'fulano@email.com'
+      responses:
+        '200':
+          description: 'O email com o token foi enviado com sucesso'
+
+        '400':
+          description: 'Bad request'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+
+
+  /auth/trocar-senha:
+    post:
+      tags:
+        - 'Usuário'
+      summary: 'Rota para atualizar a senha do usuário'
+      description: 'Rota para atualizar a senha do usuário'
+      operationId: 'trocarSenha'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Dados do novo usuário'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              email: 
+                  type: 'string'
+                  format: 'email'
+                  example: 'fulano@email.com'
+              token:
+                  type: 'string'
+              senha:
+                  type: 'string'
+                  format: 'password'
+                  example: 'senha123'
+      responses:
+        '200':
+          description: 'Senha atualizada com sucesso'
+          schema:
+            type: 'object'
+            properties:
+              mensagem:
+                type: 'string'
+                example: 'Senha trocada com sucesso'
+        '400':
+          description: 'Bad request'
+        '500':
+          description: 'Internal server error'
+
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  Usuario:
+    type: 'object'
+    properties:
+      nome:
+        type: 'string'
+      email:
+        type: 'string'
+        format: 'email'
+      _id:
+        type: 'string'
+      criadoEm:
+        type: 'string'
+        format: 'date-time'
+      _v:
+        type: 'integer'
+  
+  Compromisso:
+    type: 'object'
+    properties: 
+      _id:
+        type: 'string'
+      descricao:
+        type: 'string'
+      local:
+        type: 'string'
+      dataHora:
+        type: 'string'
+        format: 'date-time'
+      criadoEm:
+        type: 'string'
+        format: 'date-time'
+      link:
+        type: 'string'
+      _v:
+        type: 'integer'
+
+externalDocs:
+  description: 'Find out more about Swagger'
+  url: 'http://swagger.io'
